@@ -1,10 +1,28 @@
-from flask import Flask, render_template
+import os
+from flask import Flask, request, render_template
 
 app = Flask(__name__)
 
 @app.route('/')
 def waye():
     return render_template( 'index.html' )
+
+app.config["IMAGE_UPLOADS"] = "/home/mehwish/DevOps/Projects/html-project/media"
+
+@app.route('/upload-image', methods=['GET', 'POST'])
+def upload_image():
+    if request.method == "POST":
+        if request.files:
+            image = request.files["image"]
+            image.save(os.path.join(app.config["IMAGE_UPLOADS"], image.filename))
+            return render_template("upload.html", uploaded_image=image.filename)
+    return render_template("upload.html")
+
+
+@app.route('/uploads/<filename>')
+def send_uploaded_file(filename=''):
+    from flask import send_from_directory
+    return send_from_directory(app.config["IMAGE_UPLOADS"], filename)
 
 if __name__ == "__main__":
     app.run()
