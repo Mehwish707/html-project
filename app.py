@@ -1,36 +1,10 @@
-
-
-from flask import Flask, request
-
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
-
-
-
-
-
-
-@app.route("/")
-
-
-def hello():
-
-
-   print (request.headers)
-
-
-   return "Hello World!"
-
-
-
-
-
-
+@app.route('/')
+def waye():
+    return render_template( 'index.html' )
 
 if __name__ == "__main__":
-
-
-   app.run()
-
-
+    app.run()
